@@ -51,8 +51,32 @@ export default function ShowroomCanvas({ mustangRef }: ShowroomCanvasProps) {
         
         <PerspectiveCamera makeDefault position={[0, 0.4, 5.0]} fov={35} />
 
-        {/* Studio Environment Map reflections for dynamic physical chrome/paint */}
-        <Environment preset="city" />
+        {/* Studio Environment Map reflections for dynamic physical chrome/paint - 100% offline, prevents potsdamer_platz CDN loading failures */}
+        <Environment background={false}>
+          {/* A virtual light studio box mapping onto reflections */}
+          <mesh scale={100}>
+            <sphereGeometry args={[1, 64, 64]} />
+            <meshBasicMaterial color="#0b0b0d" side={THREE.BackSide} />
+          </mesh>
+          
+          {/* Ceiling light panel */}
+          <mesh position={[0, 15, 0]} rotation={[Math.PI / 2, 0, 0]}>
+            <planeGeometry args={[30, 30]} />
+            <meshBasicMaterial color="#ffffff" toneMapped={false} />
+          </mesh>
+          
+          {/* Left specular strip */}
+          <mesh position={[-15, 5, 0]} rotation={[0, Math.PI / 2, 0]}>
+            <planeGeometry args={[40, 10]} />
+            <meshBasicMaterial color="#ffffff" toneMapped={false} />
+          </mesh>
+          
+          {/* Right specular strip */}
+          <mesh position={[15, 5, 0]} rotation={[0, -Math.PI / 2, 0]}>
+            <planeGeometry args={[40, 10]} />
+            <meshBasicMaterial color="#ffffff" toneMapped={false} />
+          </mesh>
+        </Environment>
 
         <Suspense fallback={null}>
           {/* The Mustang car component set to 'original' to preserve default black paint, white stripes, and chrome details */}
