@@ -452,3 +452,42 @@ h1, h2, h3, .font-display {
     display: none;
   }
 }
+
+/* Aspect-ratio and height-adaptive mobile footer card */
+@media (max-width: 768px) {
+  @media (max-height: 740px) {
+    .mobile-footer-card {
+      max-width: 300px !important;
+      padding: 0.75rem 1rem !important;
+      gap: 0.5rem !important;
+      min-height: 0 !important;
+    }
+    .mobile-footer-card h3 {
+      font-size: 1.65rem !important;
+    }
+    .mobile-footer-card p {
+      font-size: 8px !important;
+      margin-top: 2px !important;
+    }
+    .mobile-footer-card a {
+      padding: 0.35rem 0.5rem !important;
+      font-size: 10px !important;
+    }
+  }
+  @media (max-height: 600px) {
+    .mobile-footer-card {
+      max-width: 270px !important;
+      padding: 0.5rem 0.75rem !important;
+      gap: 0.35rem !important;
+    }
+    .mobile-footer-card h3 {
+      font-size: 1.35rem !important;
+    }
+    .mobile-footer-card p {
+      display: none !important;
+    }
+    .mobile-footer-card .w-24 {
+      display: none !important;
+    }
+  }
+}

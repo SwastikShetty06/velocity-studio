@@ -111,50 +111,65 @@ export default function FinaleSection() {
 
       {/* Clean Stacked Typography & Touch-Friendly Links - Mobile Only */}
       <div 
-        className="md:hidden flex flex-col items-center text-center w-full max-w-sm mx-auto absolute bottom-[4vh] px-6 z-10 gap-3"
+        className="md:hidden flex flex-col items-center w-full px-6 absolute bottom-[3vh] left-1/2 transform -translate-x-1/2 z-10 z-[30]"
         style={{ pointerEvents: 'auto' }}
       >
-        <div className="flex flex-col items-center gap-1">
-          <h3 
-            className="text-white text-3xl font-black tracking-widest uppercase animate-fade-in"
-            style={{ fontFamily: "'Bebas Neue', sans-serif" }}
-          >
-            SWASTIK SHETTY
-          </h3>
-          <p className="text-[#ef4444] text-[10px] font-mono font-bold tracking-wider uppercase">
-            FULL STACK DEVELOPER • MERNS JAVA SPECIALIST
-          </p>
-          <p className="text-zinc-500 text-[9px] font-mono tracking-wider uppercase">
-            JAVA, REACT. JS, NODE.JS
-          </p>
-        </div>
-        
-        <div className="w-16 h-[2px] bg-[#ef4444]/60 my-1" />
-        
-        <div className="flex flex-col items-center gap-2 w-full font-mono text-xs">
-          <a 
-            href="mailto:swastikshetty06ss@gmail.com" 
-            className="text-zinc-300 hover:text-[#ef4444] active:text-[#ef4444] transition-colors duration-300 font-bold tracking-wider py-2 px-4 bg-zinc-900/60 rounded border border-zinc-800/80 w-full max-w-[260px] block"
-          >
-            SWASTIKSHETTY06SS@gmail.com
-          </a>
-          <div className="flex gap-3 w-full max-w-[260px] justify-between">
-            <a 
-              href="https://linkedin.com/in/swastik-shetty-186802235" 
-              target="_blank" 
-              rel="noopener noreferrer" 
-              className="text-zinc-300 hover:text-[#ef4444] active:text-[#ef4444] transition-colors duration-300 font-bold tracking-wider py-2 px-4 bg-zinc-900/60 rounded border border-zinc-800/80 flex-1 block text-center"
+        <div className="mobile-footer-card w-full max-w-[340px] bg-[#0c0c0e]/92 backdrop-blur-md border border-zinc-800/80 rounded-md p-5 flex flex-col items-center shadow-[0_16px_40px_rgba(0,0,0,0.85)] relative overflow-hidden transition-all duration-300 gap-3.5 min-h-[190px] justify-between">
+          
+          {/* Dashboard Accent Top Line */}
+          <div className="absolute top-0 left-0 w-full h-[2px] bg-gradient-to-r from-transparent via-[#ef4444] to-transparent" />
+          
+          {/* Micro Corner Screws / Rivets */}
+          <div className="w-1.5 h-1.5 rounded-full bg-zinc-700/80 absolute top-2.5 left-2.5 shadow-inner" />
+          <div className="w-1.5 h-1.5 rounded-full bg-zinc-700/80 absolute top-2.5 right-2.5 shadow-inner" />
+          <div className="w-1.5 h-1.5 rounded-full bg-zinc-700/80 absolute bottom-2.5 left-2.5 shadow-inner" />
+          <div className="w-1.5 h-1.5 rounded-full bg-zinc-700/80 absolute bottom-2.5 right-2.5 shadow-inner" />
+
+          {/* Typography container */}
+          <div className="flex flex-col items-center text-center gap-1 mt-1.5">
+            <h3 
+              className="text-white text-3xl tracking-widest uppercase font-black leading-none"
+              style={{ fontFamily: "'Bebas Neue', sans-serif" }}
             >
-              LINKEDIN
-            </a>
+              SWASTIK SHETTY
+            </h3>
+            <p className="text-[#ef4444] text-[10px] font-mono font-bold tracking-wider uppercase mt-1">
+              FULL STACK DEVELOPER • MERNS JAVA SPECIALIST
+            </p>
+            <p className="text-zinc-500 text-[8px] font-mono tracking-wider uppercase">
+              JAVA, REACT. JS, NODE.JS
+            </p>
+          </div>
+          
+          {/* Tiny elegant dashboard divider */}
+          <div className="w-24 h-[1px] bg-zinc-800" />
+          
+          {/* Interactive Button Pod */}
+          <div className="flex flex-col items-center gap-1.5 w-full font-mono text-[11px] sm:text-xs">
             <a 
-              href="https://github.com/SwastikShetty06" 
-              target="_blank" 
-              rel="noopener noreferrer" 
-              className="text-zinc-300 hover:text-[#ef4444] active:text-[#ef4444] transition-colors duration-300 font-bold tracking-wider py-2 px-4 bg-zinc-900/60 rounded border border-zinc-800/80 flex-1 block text-center"
+              href="mailto:swastikshetty06ss@gmail.com" 
+              className="text-zinc-300 hover:text-[#ef4444] active:text-[#ef4444] transition-colors duration-300 font-bold tracking-wider py-1.5 px-3 bg-zinc-950/80 rounded border border-zinc-800/80 w-full text-center block"
             >
-              GITHUB
+              swastikshetty06ss@gmail.com
             </a>
+            <div className="flex gap-2 w-full">
+              <a 
+                href="https://linkedin.com/in/swastik-shetty-186802235" 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                className="text-zinc-300 hover:text-[#ef4444] active:text-[#ef4444] transition-colors duration-300 font-bold tracking-wider py-1.5 px-3 bg-zinc-950/80 rounded border border-zinc-800/80 flex-1 text-center block"
+              >
+                LINKEDIN
+              </a>
+              <a 
+                href="https://github.com/SwastikShetty06" 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                className="text-zinc-300 hover:text-[#ef4444] active:text-[#ef4444] transition-colors duration-300 font-bold tracking-wider py-1.5 px-3 bg-zinc-950/80 rounded border border-zinc-800/80 flex-1 text-center block"
+              >
+                GITHUB
+              </a>
+            </div>
           </div>
         </div>
       </div>

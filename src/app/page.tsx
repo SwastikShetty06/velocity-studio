@@ -277,7 +277,7 @@ export default function Home() {
 
       {/* 3. Backdrop Text */}
       <div className="absolute top-0 left-0 w-full h-screen flex items-start justify-center pointer-events-none select-none z-[3] overflow-hidden">
-        <h1 className="hero-bg-text text-[22vw] tracking-[-0.05em] uppercase leading-[0.75] transform scale-y-[1.8] origin-top mt-[8vh]">
+        <h1 className="hero-bg-text text-[26vw] md:text-[22vw] tracking-[-0.05em] uppercase leading-[0.75] transform scale-y-[3.4] md:scale-y-[1.8] origin-top mt-[4vh] md:mt-[8vh]">
           MUSTANG
         </h1>
       </div>
