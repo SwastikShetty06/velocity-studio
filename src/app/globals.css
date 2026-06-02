@@ -1,26 +1,454 @@
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Outfit:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&family=Share+Tech+Mono&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap');
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #f2f0eb; /* Vintage Warm Paper Cream */
+  --foreground: #1c1917; /* Rich Charcoal Stone */
+  --accent: #b91c1c; /* High-Octane Shelby Crimson */
+  --accent-glow: rgba(185, 28, 28, 0.35);
+  --amber-glow: rgba(217, 119, 6, 0.3);
+  --border-color: rgba(0, 0, 0, 0.08);
+  --gt-bg: rgba(18, 18, 20, 0.97); /* Solid carbon-metal panel backing */
+  --metal-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.12), 
+                   0 25px 50px rgba(0, 0, 0, 0.45),
+                   0 0 40px rgba(185, 28, 28, 0.03);
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html {
+  scroll-behavior: smooth;
+  background-color: var(--background);
 }
 
 body {
-  background: var(--background);
+  background-color: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: 'Outfit', sans-serif;
+  overflow-x: hidden;
+  min-height: 100vh;
+  position: relative;
+}
+
+h1, h2, h3, .font-display {
+  font-family: 'Space Grotesk', sans-serif;
+}
+
+.font-serif {
+  font-family: 'Playfair Display', serif;
+}
+
+.font-condensed {
+  font-family: 'Bebas Neue', sans-serif;
+}
+
+.font-mono {
+  font-family: 'Share Tech Mono', monospace;
+}
+
+/* Background tactile paper grit noise */
+.paper-texture {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 50;
+  pointer-events: none;
+  opacity: 0.06; /* Enhanced on off-white paper */
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+}
+
+/* 3D WebGL Canvas Layer */
+.canvas-viewport {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  z-index: 5;
+}
+
+/* Scroll Container */
+#scroll-container {
+  position: relative;
+  width: 100%;
+  z-index: 10;
+}
+
+.scroll-section {
+  min-height: 100vh;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  position: relative;
+  padding: 6rem 10%;
+  box-sizing: border-box;
+}
+
+/* Le Mans/Shelby Twin Vertical Background Racing Stripes */
+.shelby-stripes-bg {
+  position: fixed;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 180px;
+  height: 100vh;
+  background: repeating-linear-gradient(
+    to right,
+    rgba(185, 28, 28, 0.15) 0px,
+    rgba(185, 28, 28, 0.15) 65px,
+    transparent 65px,
+    transparent 85px,
+    rgba(185, 28, 28, 0.15) 85px,
+    rgba(185, 28, 28, 0.15) 150px
+  );
+  pointer-events: none;
+  z-index: 2; /* Sits behind the 3D car */
+}
+
+/* Dynamic Dark Background for Climax Footer Section */
+.finale-dark-bg {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: #0d0d0f;
+  pointer-events: none;
+  z-index: 1; /* Behind stripes (z-index 2) and Canvas (z-index 5) */
+  opacity: 0;
+}
+
+/* Elongated Background "MUSTANG" Header with charcoal gradient */
+.hero-bg-text {
+  font-family: 'Bebas Neue', sans-serif;
+  background: linear-gradient(to bottom, #111111 0%, #27272a 45%, rgba(242, 240, 235, 0) 80%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  color: transparent;
+  display: inline-block;
+  font-weight: 900;
+  letter-spacing: -0.05em;
+  text-transform: uppercase;
+}
+
+/* Premium Crimson Race Badge */
+.accent-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--accent);
+  color: #ffffff;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  padding: 5px 12px;
+  border-radius: 2px;
+  text-transform: uppercase;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 2px 6px rgba(185, 28, 28, 0.15);
+}
+
+/* --- THE MUSTANG GT GAUGE POD CARD --- */
+.gt-card {
+  background: var(--gt-bg);
+  border: 2px solid #1c1917;
+  box-shadow: var(--metal-shadow);
+  border-radius: 4px; /* Industrial sharp corner */
+  padding: 2.75rem;
+  max-width: 450px;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  z-index: 10;
+}
+
+/* Force light color for dashboard cards text */
+.gt-card h2, .gt-card h3 {
+  color: #ffffff !important;
+}
+
+.gt-card p {
+  color: #a1a1aa !important; /* Muted zinc text inside dark cards */
+}
+
+.gt-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--accent), transparent);
+}
+
+.gt-card:hover {
+  border-color: #3f3f46;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.15), 
+              0 30px 60px rgba(0, 0, 0, 0.55),
+              0 0 80px rgba(185, 28, 28, 0.05);
+  transform: translateY(-2px);
+}
+
+/* Metal Dashboard Corner Rivet Screws */
+.rivet {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: radial-gradient(circle, #a1a1aa 25%, #3f3f46 80%);
+  box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.4), 
+              0 1px 2px rgba(0, 0, 0, 0.85);
+  position: absolute;
+}
+.rivet-tl { top: 12px; left: 12px; }
+.rivet-tr { top: 12px; right: 12px; }
+.rivet-bl { bottom: 12px; left: 12px; }
+.rivet-br { bottom: 12px; right: 12px; }
+
+/* Dashboard Specs Divider */
+.gt-divider {
+  width: 100%;
+  height: 2px;
+  background: repeating-linear-gradient(
+    90deg,
+    #27272a,
+    #27272a 4px,
+    transparent 4px,
+    transparent 8px
+  );
+  margin: 1.5rem 0;
+}
+
+/* --- THE 1960s SPEEDOMETER & TACHOMETER CIRCULAR GAUGES --- */
+.gauge-pod {
+  width: 96px;
+  height: 96px;
+  border-radius: 50%;
+  border: 4px solid #3f3f46; /* Brushed-metal casing bezel */
+  border-top-color: #71717a;
+  border-bottom-color: #18181b;
+  position: relative;
+  background: radial-gradient(circle, #101012 60%, #08080a 100%);
+  box-shadow: inset 0 8px 20px rgba(0, 0, 0, 0.95), 
+              0 6px 12px rgba(0, 0, 0, 0.6),
+              inset 0 1px 0 rgba(255, 255, 255, 0.25);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.gauge-needle {
+  width: 2px;
+  height: 42px;
+  background: var(--accent);
+  position: absolute;
+  bottom: 50%;
+  left: calc(50% - 1px);
+  transform-origin: bottom center;
+  transform: rotate(-90deg); /* Starts at zero */
+  box-shadow: 0 0 8px var(--accent-glow);
+  z-index: 3;
+}
+
+.gauge-center {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: radial-gradient(circle, #e4e4e7 20%, #27272a 80%);
+  position: absolute;
+  z-index: 4;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.9),
+              inset 0 0.5px 0.5px white;
+}
+
+.gauge-amber-glow {
+  position: absolute;
+  inset: 4px;
+  border-radius: 50%;
+  box-shadow: 0 0 10px var(--amber-glow);
+  pointer-events: none;
+  opacity: 0.65;
+  z-index: 1;
+}
+
+/* Gauge scale ticks */
+.gauge-pod::before {
+  content: '';
+  position: absolute;
+  inset: 6px;
+  border-radius: 50%;
+  border: 1px dashed rgba(217, 119, 6, 0.2);
+  pointer-events: none;
+}
+
+/* --- THE TIMELINE HIGHWAY RIDE --- */
+.timeline-track-container {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 260px; /* Asphalt lane width */
+  height: 100%;
+  background: #1c1917; /* Asphalt Stone Black */
+  border-left: 4px solid #b91c1c; /* Left Crimson shoulder */
+  border-right: 4px solid #b91c1c; /* Right Crimson shoulder */
+  box-shadow: 0 0 50px rgba(0, 0, 0, 0.35);
+  pointer-events: none;
+  z-index: 1;
+}
+
+.timeline-road-track {
+  position: fixed !important;
+  top: 0 !important;
+  left: 50% !important;
+  transform: translateX(-50%) !important;
+  width: 380px; /* Bigger road than Mustang! */
+  height: 100vh !important;
+  background: #1c1917;
+  border-left: 6px solid #b91c1c; /* Thick Crimson shoulder */
+  border-right: 6px solid #b91c1c; /* Thick Crimson shoulder */
+  box-shadow: 0 0 50px rgba(0, 0, 0, 0.35);
+  pointer-events: none;
+  z-index: 3; /* Behind 3D Canvas (zIndex 5) */
+}
+
+.timeline-road-stripes {
+  width: 6px; /* Stronger dashed line */
+  height: 100%;
+  position: absolute;
+  left: calc(50% - 3px);
+  background: repeating-linear-gradient(
+    to bottom,
+    #f59e0b 0px,
+    #f59e0b 50px,
+    transparent 50px,
+    transparent 100px
+  );
+  background-size: 100% 100px;
+  z-index: 2;
+  box-shadow: 0 0 12px rgba(245, 158, 11, 0.4);
+}
+
+/* Timeline milestone card plate */
+.timeline-milestone-card {
+  background: var(--gt-bg);
+  border: 2px solid #27272a;
+  border-radius: 4px;
+  padding: 1.75rem;
+  width: 320px; /* Enhanced vintage readability */
+  box-shadow: var(--metal-shadow);
+  position: absolute;
+  z-index: 10;
+  transition: all 0.5s ease;
+}
+
+.timeline-milestone-card h3 {
+  font-family: 'Space Grotesk', sans-serif;
+  color: #ffffff !important;
+}
+
+.timeline-milestone-card p {
+  color: #a1a1aa !important;
+  font-family: 'Share Tech Mono', monospace;
+}
+
+/* Horizontal Connector lines pointing to the highway */
+.timeline-milestone-card::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  width: 50px; /* Longer connector */
+  height: 2px;
+  background: #f59e0b;
+  box-shadow: 0 0 6px rgba(245, 158, 11, 0.4);
+}
+
+.timeline-card-left {
+  right: calc(50% + 240px); /* Pushed far away to clear the car and road */
+}
+.timeline-card-left::before {
+  right: -50px;
+}
+
+.timeline-card-right {
+  left: calc(50% + 240px); /* Pushed far away */
+}
+.timeline-card-right::before {
+  left: -50px;
+}
+
+/* High Octane Metal Start Button */
+.gt-start-btn {
+  background: linear-gradient(180deg, #dc2626, #991b1b);
+  border: 2px solid #7f1d1d;
+  color: #ffffff;
+  font-family: 'Share Tech Mono', monospace;
+  font-weight: 900;
+  letter-spacing: 0.2em;
+  padding: 1.25rem 2.5rem;
+  border-radius: 4px;
+  box-shadow: 0 10px 25px rgba(220, 38, 38, 0.35), 
+              inset 0 1px 0 rgba(255, 255, 255, 0.4);
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  cursor: pointer;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+.gt-start-btn:hover {
+  background: linear-gradient(180deg, #ef4444, #b91c1c);
+  transform: translateY(-2px) scale(1.03);
+  box-shadow: 0 15px 30px rgba(220, 38, 38, 0.55), 
+              0 0 30px rgba(220, 38, 38, 0.35),
+              inset 0 1px 0 rgba(255, 255, 255, 0.5);
+}
+
+.gt-start-btn:active {
+  transform: translateY(1px);
+  box-shadow: 0 5px 10px rgba(220, 38, 38, 0.2);
+}
+
+/* Custom Webkit scrollbar matching vintage paper theme */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #f2f0eb;
+}
+::-webkit-scrollbar-thumb {
+  background: #c7c5c0;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--accent);
+}
+
+/* Responsive constraints */
+@media (max-width: 640px) {
+  .gt-card {
+    padding: 1.5rem;
+    max-width: 100%;
+  }
+  .timeline-card-left, .timeline-card-right {
+    position: relative;
+    left: 0;
+    right: 0;
+    width: 100%;
+    margin-bottom: 2rem;
+  }
+  .timeline-card-left::before, .timeline-card-right::before {
+    display: none;
+  }
+  .timeline-track-container {
+    display: none;
+  }
 }
