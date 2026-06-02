@@ -5,6 +5,7 @@ import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { MustangRef } from '@/components/Mustang'
 import ShowroomCanvas from '@/components/ShowroomCanvas'
+import GarageLoader from '@/components/GarageLoader'
 import HeroSection from '@/components/HeroSection'
 import AboutSection from '@/components/AboutSection'
 import SpecsSection from '@/components/SpecsSection'
@@ -20,6 +21,8 @@ export default function Home() {
   const containerRef = useRef<HTMLDivElement>(null)
   const mustangRef = useRef<MustangRef>(null)
   const [mounted, setMounted] = useState(false)
+  const [modelLoaded, setModelLoaded] = useState(false)
+  const [introRunning, setIntroRunning] = useState(true)
 
   // Defer rendering of R3F Canvas until the client mounts to prevent SSR hydration errors
   useEffect(() => {
@@ -39,6 +42,7 @@ export default function Home() {
 
       if (car && spinningGroup && platform) {
         clearInterval(checkInterval)
+        setModelLoaded(true)
 
         ctx = gsap.context(() => {
           // Setup infinite looping spin tween for 360 view
@@ -252,8 +256,16 @@ export default function Home() {
   }, [mounted])
 
   return (
-    <div className="relative min-h-screen w-full bg-[var(--background)] overflow-x-hidden">
+    <div className={`relative min-h-screen w-full bg-[var(--background)] ${introRunning ? 'overflow-hidden h-screen' : 'overflow-x-hidden'}`}>
       
+      {/* 0. Industrial Garage Shutter Loader Screen */}
+      {introRunning && (
+        <GarageLoader 
+          active={!modelLoaded} 
+          onComplete={() => setIntroRunning(false)} 
+        />
+      )}
+
       {/* 1. Road Asphalt Grit overlay texture */}
       <div className="paper-texture" />
 
