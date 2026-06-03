@@ -1,9 +1,13 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
   title: "Mustang NASCAR Edition | Interactive 3D Experience",
   description: "A premium, scroll-driven interactive 3D WebGL experience showcasing the legendary 2019 NASCAR Ford Mustang, built with Next.js, React Three Fiber, and GSAP.",
+};
+
+export const viewport: Viewport = {
+  colorScheme: 'only light',
 };
 
 export default function RootLayout({

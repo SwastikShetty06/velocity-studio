@@ -2,6 +2,7 @@
 @import "tailwindcss";
 
 :root {
+  color-scheme: only light;
   --background: #f2f0eb; /* Vintage Warm Paper Cream */
   --foreground: #1c1917; /* Rich Charcoal Stone */
   --accent: #b91c1c; /* High-Octane Shelby Crimson */
