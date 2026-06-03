@@ -20,9 +20,10 @@ function CameraRig() {
 
 interface ShowroomCanvasProps {
   mustangRef: React.RefObject<MustangRef | null>
+  carType?: 'mustang' | 'porsche'
 }
 
-export default function ShowroomCanvas({ mustangRef }: ShowroomCanvasProps) {
+export default function ShowroomCanvas({ mustangRef, carType = 'mustang' }: ShowroomCanvasProps) {
   return (
     <div className="canvas-viewport">
       <Canvas 
@@ -56,7 +57,7 @@ export default function ShowroomCanvas({ mustangRef }: ShowroomCanvasProps) {
 
         <Suspense fallback={null}>
           {/* The Mustang car component set to 'original' to preserve default black paint, white stripes, and chrome details */}
-          <Mustang ref={mustangRef} color="original" />
+          <Mustang ref={mustangRef} color="original" carType={carType} />
           
           {/* Floor Soft Contact Shadows - shifted up to y=-0.22 to follow the elevated car position and platform */}
           <ContactShadows 

@@ -6,6 +6,7 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { MustangRef } from '@/components/Mustang'
 import ShowroomCanvas from '@/components/ShowroomCanvas'
 import GarageLoader from '@/components/GarageLoader'
+import MenuBar from '@/components/MenuBar'
 import HeroSection from '@/components/HeroSection'
 import AboutSection from '@/components/AboutSection'
 import SpecsSection from '@/components/SpecsSection'
@@ -23,6 +24,7 @@ export default function Home() {
   const [mounted, setMounted] = useState(false)
   const [modelLoaded, setModelLoaded] = useState(false)
   const [introRunning, setIntroRunning] = useState(true)
+  const [activeCar, setActiveCar] = useState<'mustang' | 'porsche'>('mustang')
 
   // Defer rendering of R3F Canvas until the client mounts to prevent SSR hydration errors
   useEffect(() => {
@@ -253,10 +255,17 @@ export default function Home() {
       clearInterval(checkInterval)
       if (ctx) ctx.revert() 
     }
-  }, [mounted])
+  }, [mounted, activeCar])
+
+  const handleCarChange = (car: 'mustang' | 'porsche') => {
+    if (car === activeCar) return
+    setModelLoaded(false)
+    setIntroRunning(true)
+    setActiveCar(car)
+  }
 
   return (
-    <div className={`relative min-h-screen w-full bg-[var(--background)] ${introRunning ? 'overflow-hidden h-screen' : 'overflow-x-hidden'}`}>
+    <div className={`relative min-h-screen w-full bg-[var(--background)] theme-${activeCar} ${introRunning ? 'overflow-hidden h-screen' : 'overflow-x-hidden'}`}>
       
       {/* 0. Industrial Garage Shutter Loader Screen */}
       {introRunning && (
@@ -264,6 +273,11 @@ export default function Home() {
           active={!modelLoaded} 
           onComplete={() => setIntroRunning(false)} 
         />
+      )}
+
+      {/* 0.5. Top Floating Glassmorphism Menu Bar */}
+      {!introRunning && (
+        <MenuBar activeCar={activeCar} onCarChange={handleCarChange} />
       )}
 
       {/* 1. Road Asphalt Grit overlay texture */}
@@ -278,7 +292,7 @@ export default function Home() {
       {/* 3. Backdrop Text */}
       <div className="absolute top-0 left-0 w-full h-screen flex items-start justify-center pointer-events-none select-none z-[3] overflow-hidden">
         <h1 className="hero-bg-text text-[26vw] md:text-[22vw] tracking-[-0.05em] uppercase leading-[0.75] transform scale-y-[3.4] md:scale-y-[1.8] origin-top mt-[4vh] md:mt-[8vh]">
-          MUSTANG
+          {activeCar === 'mustang' ? 'MUSTANG' : 'PORSCHE'}
         </h1>
       </div>
 
@@ -288,7 +302,7 @@ export default function Home() {
       </div>
 
       {/* 5. 3D WebGL Canvas Layer */}
-      {mounted && <ShowroomCanvas mustangRef={mustangRef} />}
+      {mounted && <ShowroomCanvas mustangRef={mustangRef} carType={activeCar} />}
 
       {/* 6. HTML Overlay Text & Sections */}
       <main 
@@ -296,10 +310,10 @@ export default function Home() {
         id="scroll-container" 
         className="relative w-full bg-transparent"
       >
-        <HeroSection />
-        <AboutSection />
-        <SpecsSection />
-        <TimelineSection />
+        <HeroSection carType={activeCar} />
+        <AboutSection carType={activeCar} />
+        <SpecsSection carType={activeCar} />
+        <TimelineSection carType={activeCar} />
         <FinaleSection />
       </main>
     </div>

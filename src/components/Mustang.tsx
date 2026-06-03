@@ -4,6 +4,7 @@ import * as THREE from 'three'
 import React, { forwardRef, useImperativeHandle, useRef, useMemo, useEffect } from 'react'
 import { useGLTF } from '@react-three/drei'
 import { GLTF } from 'three-stdlib'
+import Porsche911 from './Porsche911'
 
 type GLTFResult = GLTF & {
   nodes: {
@@ -17,33 +18,9 @@ type GLTFResult = GLTF & {
   }
 }
 
-export interface MustangProps extends React.ComponentPropsWithoutRef<'group'> {
-  onLoad?: () => void
-  color?: 'black' | 'white' | 'red' | 'original'
-}
-
-export interface MustangRef {
-  car: THREE.Group | null
-  hood: THREE.Group | null
-  spinningGroup: THREE.Group | null
-  platform: THREE.Group | null
-}
-
-const Mustang = forwardRef<MustangRef, MustangProps>(({ onLoad, color = 'original', ...props }, ref) => {
-  // Load the new high-fidelity 1967 Mustang model
+// Mustang Model specific loader
+function MustangModel({ color = 'original' }: { color?: string }) {
   const { scene, materials } = useGLTF('/models/1967_ford_mustang_fastback_-_4096px2.glb') as unknown as GLTFResult
-
-  const carRef = useRef<THREE.Group>(null)
-  const dummyHoodRef = useRef<THREE.Group>(null)
-  const spinningGroupRef = useRef<THREE.Group>(null)
-  const platformRef = useRef<THREE.Group>(null)
-
-  // Trigger onLoad callback when the model mounts
-  useEffect(() => {
-    if (onLoad) {
-      onLoad()
-    }
-  }, [onLoad])
 
   // Configure high-fidelity shadow casting and reflection intensity on all loaded children
   useEffect(() => {
@@ -58,25 +35,6 @@ const Mustang = forwardRef<MustangRef, MustangProps>(({ onLoad, color = 'origina
       }
     })
   }, [scene])
-
-  // Expose refs for GSAP to control.
-  // Since the 1967 model is a single continuous high-fidelity shell, it does not have a separated
-  // hood mesh. We return a dummyHoodRef to prevent GSAP and loading pollers from crashing,
-  // allowing the scroll-timeline to run perfectly and adapt cleanly!
-  useImperativeHandle(ref, () => ({
-    get car() {
-      return carRef.current
-    },
-    get hood() {
-      return dummyHoodRef.current
-    },
-    get spinningGroup() {
-      return spinningGroupRef.current
-    },
-    get platform() {
-      return platformRef.current
-    }
-  }))
 
   // Elevate materials dynamically for a luxury metallic vintage look
   useMemo(() => {
@@ -143,10 +101,61 @@ const Mustang = forwardRef<MustangRef, MustangProps>(({ onLoad, color = 'origina
     }
   }, [materials, color])
 
+  return <primitive object={scene} />
+}
+
+export interface MustangProps extends React.ComponentPropsWithoutRef<'group'> {
+  onLoad?: () => void
+  color?: 'black' | 'white' | 'red' | 'original'
+  carType?: 'mustang' | 'porsche'
+}
+
+export interface MustangRef {
+  car: THREE.Group | null
+  hood: THREE.Group | null
+  spinningGroup: THREE.Group | null
+  platform: THREE.Group | null
+}
+
+const Mustang = forwardRef<MustangRef, MustangProps>(({ onLoad, color = 'original', carType = 'mustang', ...props }, ref) => {
+  const carRef = useRef<THREE.Group>(null)
+  const dummyHoodRef = useRef<THREE.Group>(null)
+  const spinningGroupRef = useRef<THREE.Group>(null)
+  const platformRef = useRef<THREE.Group>(null)
+
+  // Trigger onLoad callback when the model mounts
+  useEffect(() => {
+    if (onLoad) {
+      onLoad()
+    }
+  }, [onLoad])
+
+  // Expose refs for GSAP to control.
+  useImperativeHandle(ref, () => ({
+    get car() {
+      return carRef.current
+    },
+    get hood() {
+      return dummyHoodRef.current
+    },
+    get spinningGroup() {
+      return spinningGroupRef.current
+    },
+    get platform() {
+      return platformRef.current
+    }
+  }))
+
   return (
     <group {...props} ref={carRef} dispose={null}>
       <group ref={spinningGroupRef}>
-        <primitive object={scene} />
+        
+        {/* Render either the Mustang model or the Porsche 911 model */}
+        {carType === 'mustang' ? (
+          <MustangModel color={color} />
+        ) : (
+          <Porsche911 color="original" />
+        )}
         
         {/* Elegant circular turntable stage under the car wheels */}
         <group ref={platformRef}>
@@ -173,8 +182,6 @@ const Mustang = forwardRef<MustangRef, MustangProps>(({ onLoad, color = 'origina
             />
           </mesh>
           
-
-          
           {/* Outer high-gloss dark chrome bezel border */}
           <mesh position={[0, -0.155, 0]}>
             <cylinderGeometry args={[2.33, 2.33, 0.07, 64]} />
@@ -198,4 +205,6 @@ Mustang.displayName = 'Mustang'
 
 export default Mustang
 
+// Preload both assets so they are ready
 useGLTF.preload('/models/1967_ford_mustang_fastback_-_4096px2.glb')
+useGLTF.preload('/models/porsche_911.glb')
