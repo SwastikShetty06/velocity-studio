@@ -1,5 +1,7 @@
 # 🏁 Velocity Studio - Interactive 3D Multi-Vehicle Showroom
 
+🔗 **Live Demo**: [https://velocity-studio-iota.vercel.app](https://velocity-studio-iota.vercel.app)
+
 An ultra-premium, scroll-driven interactive 3D WebGL vehicle showroom engineered in **Next.js (App Router)** utilizing **React Three Fiber (R3F)** and **GSAP (ScrollTrigger)**. 
 
 Initially showcasing a highly calibrated 1967 Ford Mustang GT Fastback resting on an elegant, rotating circular pedestal stage, the architecture is designed from the ground up to be highly modular, lightweight, and extensible for adding a menu bar and multiple vehicles in the future.
