@@ -34,6 +34,17 @@ export default function Porsche911({ color = 'original' }: Porsche911Props) {
         }
       }
     })
+
+    // Correct the rear wheels' rotation to align them parallel to the car body (neutralizing the raw model's 42.9-degree yaw/steer offset)
+    const rlWheel = scene.getObjectByName('TireFR.001')
+    const rrWheel = scene.getObjectByName('TireFR.003')
+    
+    if (rlWheel) {
+      rlWheel.rotation.z = (9.07 * Math.PI) / 180
+    }
+    if (rrWheel) {
+      rrWheel.rotation.z = (-170.93 * Math.PI) / 180
+    }
   }, [scene])
 
   // Elevate materials dynamically for a luxury metallic vintage look
@@ -87,9 +98,12 @@ export default function Porsche911({ color = 'original' }: Porsche911Props) {
   }, [materials])
 
   return (
-    <Center bottom>
+    <group 
+      rotation={[0, -9.07 * Math.PI / 180, 0]} 
+      position={[0.0676, 0.0439, -0.1373]}
+    >
       <primitive object={scene} />
-    </Center>
+    </group>
   )
 }
 
