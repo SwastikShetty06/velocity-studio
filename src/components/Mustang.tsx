@@ -207,4 +207,4 @@ export default Mustang
 
 // Preload both assets so they are ready
 useGLTF.preload('/models/1967_ford_mustang_fastback_-_4096px2.glb')
-useGLTF.preload('/models/porsche_911.glb')
+useGLTF.preload('/models/2014_porsche_911_turbo_991.glb')

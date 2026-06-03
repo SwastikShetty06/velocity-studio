@@ -2,7 +2,7 @@
 
 import * as THREE from 'three'
 import React, { useEffect, useMemo } from 'react'
-import { useGLTF, Center } from '@react-three/drei'
+import { useGLTF } from '@react-three/drei'
 import { GLTF } from 'three-stdlib'
 
 type GLTFResult = GLTF & {
@@ -19,8 +19,8 @@ export interface Porsche911Props {
 }
 
 export default function Porsche911({ color = 'original' }: Porsche911Props) {
-  // Load the new high-fidelity Porsche 911 model
-  const { scene, materials } = useGLTF('/models/porsche_911.glb') as unknown as GLTFResult
+  // Load the new high-fidelity 2014 Porsche 911 Turbo model
+  const { scene, materials } = useGLTF('/models/2014_porsche_911_turbo_991.glb') as unknown as GLTFResult
 
   // Configure high-fidelity shadow casting and reflection intensity on all loaded children
   useEffect(() => {
@@ -34,27 +34,17 @@ export default function Porsche911({ color = 'original' }: Porsche911Props) {
         }
       }
     })
-
-    // Correct the rear wheels' rotation to align them parallel to the car body (neutralizing the raw model's 42.9-degree yaw/steer offset)
-    const rlWheel = scene.getObjectByName('TireFR.001')
-    const rrWheel = scene.getObjectByName('TireFR.003')
-    
-    if (rlWheel) {
-      rlWheel.rotation.z = (9.07 * Math.PI) / 180
-    }
-    if (rrWheel) {
-      rrWheel.rotation.z = (-170.93 * Math.PI) / 180
-    }
   }, [scene])
 
-  // Elevate materials dynamically for a luxury metallic vintage look
+  // Elevate materials dynamically for a luxury metallic look matching the theme
   useMemo(() => {
     if (!materials) return
 
-    // 1. Main body paint (Miami Blue / Gentian Blue styling)
-    const paint = materials.Blue_Car_Paint || materials['1_car_paint.002'] || materials['1_car_paint.007']
+    // 1. Main body paint (CarPaint)
+    const paint = materials.CarPaint || materials.Paint_Metal || materials.Paint_Plastic
     if (paint) {
-      // By default keep the GLB's original high-fidelity blue paint, but enhance specular clearcoat
+      // Miami Blue styling for Porsche
+      paint.color.set('#00b0ff')
       paint.metalness = 0.95
       paint.roughness = 0.05
       
@@ -62,16 +52,16 @@ export default function Porsche911({ color = 'original' }: Porsche911Props) {
         // @ts-ignore
         paint.clearcoat = 1.0
         // @ts-ignore
-        paint.clearcoatRoughness = 0.01
+        paint.clearcoatRoughness = 0.015
       }
     }
 
     // 2. High reflective premium window tints
-    const glass = materials.Glass || materials.Car_windshield_glass || materials['Car_windshield_glass.001']
+    const glass = materials.windows || materials.glass_light || materials.red_glass
     if (glass) {
       glass.color.set('#080808')
       glass.transparent = true
-      glass.opacity = 0.5
+      glass.opacity = 0.65
       glass.roughness = 0.01
       glass.metalness = 0.3
       if ('clearcoat' in glass) {
@@ -81,7 +71,7 @@ export default function Porsche911({ color = 'original' }: Porsche911Props) {
     }
 
     // 3. Polished Chrome / Rims styling
-    const chrome = materials.Chrome || materials.Rims || materials['Rims.001'] || materials['chrome.002']
+    const chrome = materials.Rims || materials.rim_Color || materials.disk
     if (chrome) {
       chrome.color.set('#e2e2e2')
       chrome.roughness = 0.08
@@ -89,7 +79,7 @@ export default function Porsche911({ color = 'original' }: Porsche911Props) {
     }
 
     // 4. Matte base plastic / trim blackout
-    const blackout = materials.Black_Plastic || materials.Plastic_Base_02 || materials['Black_Plastic.001']
+    const blackout = materials.Plas_S || materials.chassis || materials.grille_b
     if (blackout) {
       blackout.color.set('#0f0f0f')
       blackout.roughness = 0.65
@@ -99,12 +89,12 @@ export default function Porsche911({ color = 'original' }: Porsche911Props) {
 
   return (
     <group 
-      rotation={[0, -9.07 * Math.PI / 180, 0]} 
-      position={[0.0676, 0.0439, -0.1373]}
+      scale={[100, 100, 100]}
+      position={[0, 0.15, 0]}
     >
       <primitive object={scene} />
     </group>
   )
 }
 
-useGLTF.preload('/models/porsche_911.glb')
+useGLTF.preload('/models/2014_porsche_911_turbo_991.glb')
